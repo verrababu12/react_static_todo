@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import TodoItem from "../TodoItem";
+import { v4 as uuidv4 } from "uuid";
+
 import "./index.css";
 
 const LOCAL_STORAGE_KEY = "my_todo_list";
@@ -18,9 +20,10 @@ const TodoList = () => {
     }
   }, []);
 
-  // Save todos to localStorage whenever they change
   useEffect(() => {
-    if (todos.length > 0) {
+    if (todos.length === 0) {
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
+    } else {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
     }
   }, [todos]);
@@ -33,7 +36,7 @@ const TodoList = () => {
     if (input.trim() === "") return;
 
     const newTodo = {
-      id: Date.now(),
+      id: uuidv4(),
       text: input,
       completed: false,
       isEditing: false,
